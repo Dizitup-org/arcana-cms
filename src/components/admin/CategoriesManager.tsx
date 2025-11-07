@@ -5,21 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-
-interface Category {
-  id: number;
-  name: string;
-  postCount: number;
-}
+import { useCMS } from "@/contexts/CMSContext";
 
 const CategoriesManager = () => {
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "Development", postCount: 12 },
-    { id: 2, name: "Technology", postCount: 8 },
-    { id: 3, name: "Marketing", postCount: 5 },
-    { id: 4, name: "Design", postCount: 7 }
-  ]);
-  
+  const { categories, addCategory, deleteCategory } = useCMS();
   const [newCategory, setNewCategory] = useState("");
 
   const handleAddCategory = (e: React.FormEvent) => {
@@ -35,13 +24,7 @@ const CategoriesManager = () => {
       return;
     }
 
-    const category: Category = {
-      id: Math.max(...categories.map(c => c.id), 0) + 1,
-      name: newCategory.trim(),
-      postCount: 0
-    };
-
-    setCategories([...categories, category]);
+    addCategory(newCategory.trim());
     setNewCategory("");
     toast.success("Category added successfully");
   };
@@ -53,7 +36,7 @@ const CategoriesManager = () => {
       return;
     }
 
-    setCategories(categories.filter(c => c.id !== id));
+    deleteCategory(id);
     toast.success("Category deleted successfully");
   };
 

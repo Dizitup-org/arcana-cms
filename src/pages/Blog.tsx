@@ -4,58 +4,16 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-
-interface Post {
-  id: number;
-  title: string;
-  excerpt: string;
-  content: string;
-  category: string;
-  author: string;
-  publishedAt: string;
-  readTime: string;
-}
-
-const mockPosts: Post[] = [
-  {
-    id: 1,
-    title: "Getting Started with Modern Web Development",
-    excerpt: "Learn the fundamentals of building modern web applications with the latest technologies and best practices.",
-    content: "Full article content here...",
-    category: "Development",
-    author: "Sarah Johnson",
-    publishedAt: "2024-03-15",
-    readTime: "5 min read"
-  },
-  {
-    id: 2,
-    title: "The Future of Content Management",
-    excerpt: "Exploring how content management systems are evolving to meet the needs of modern digital experiences.",
-    content: "Full article content here...",
-    category: "Technology",
-    author: "Michael Chen",
-    publishedAt: "2024-03-10",
-    readTime: "7 min read"
-  },
-  {
-    id: 3,
-    title: "Best Practices for SEO in 2024",
-    excerpt: "Stay ahead with the latest SEO strategies and techniques to improve your website's visibility.",
-    content: "Full article content here...",
-    category: "Marketing",
-    author: "Emma Wilson",
-    publishedAt: "2024-03-05",
-    readTime: "6 min read"
-  }
-];
+import { useCMS } from "@/contexts/CMSContext";
 
 const Blog = () => {
+  const { getPublishedPosts, categories } = useCMS();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const categories = Array.from(new Set(mockPosts.map(post => post.category)));
+  const publishedPosts = getPublishedPosts();
 
-  const filteredPosts = mockPosts.filter(post => {
+  const filteredPosts = publishedPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || post.category === selectedCategory;
@@ -112,12 +70,12 @@ const Blog = () => {
             </Button>
             {categories.map(category => (
               <Button
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category)}
+                key={category.id}
+                variant={selectedCategory === category.name ? "default" : "outline"}
+                onClick={() => setSelectedCategory(category.name)}
                 size="sm"
               >
-                {category}
+                {category.name}
               </Button>
             ))}
           </div>
@@ -147,7 +105,7 @@ const Blog = () => {
               <CardContent>
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span>{post.author}</span>
-                  <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
+                  <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                 </div>
               </CardContent>
             </Card>

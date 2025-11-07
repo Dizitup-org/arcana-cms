@@ -1,65 +1,28 @@
-import { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2, Eye, CheckCircle, XCircle } from "lucide-react";
 import { toast } from "sonner";
-
-interface Post {
-  id: number;
-  title: string;
-  category: string;
-  status: "draft" | "published" | "pending";
-  author: string;
-  createdAt: string;
-}
-
-const mockPosts: Post[] = [
-  {
-    id: 1,
-    title: "Getting Started with Modern Web Development",
-    category: "Development",
-    status: "published",
-    author: "Sarah Johnson",
-    createdAt: "2024-03-15"
-  },
-  {
-    id: 2,
-    title: "The Future of Content Management",
-    category: "Technology",
-    status: "pending",
-    author: "Michael Chen",
-    createdAt: "2024-03-14"
-  },
-  {
-    id: 3,
-    title: "Best Practices for SEO in 2024",
-    category: "Marketing",
-    status: "draft",
-    author: "Emma Wilson",
-    createdAt: "2024-03-13"
-  }
-];
+import { useCMS, Post } from "@/contexts/CMSContext";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useState } from "react";
 
 const PostsList = () => {
-  const [posts, setPosts] = useState<Post[]>(mockPosts);
+  const { posts, updatePost, deletePost } = useCMS();
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
   const handleApprove = (id: number) => {
-    setPosts(posts.map(post => 
-      post.id === id ? { ...post, status: "published" as const } : post
-    ));
+    updatePost(id, { status: "published" });
     toast.success("Post approved and published");
   };
 
   const handleReject = (id: number) => {
-    setPosts(posts.map(post => 
-      post.id === id ? { ...post, status: "draft" as const } : post
-    ));
+    updatePost(id, { status: "draft" });
     toast.info("Post moved to draft");
   };
 
   const handleDelete = (id: number) => {
-    setPosts(posts.filter(post => post.id !== id));
+    deletePost(id);
     toast.success("Post deleted successfully");
   };
 
@@ -89,53 +52,92 @@ const PostsList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {posts.map((post) => (
-              <TableRow key={post.id}>
-                <TableCell className="font-medium">{post.title}</TableCell>
-                <TableCell>{post.category}</TableCell>
-                <TableCell>{getStatusBadge(post.status)}</TableCell>
-                <TableCell>{post.author}</TableCell>
-                <TableCell>{new Date(post.createdAt).toLocaleDateString()}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    {post.status === "pending" && (
-                      <>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleApprove(post.id)}
-                          title="Approve"
-                        >
-                          <CheckCircle className="h-4 w-4 text-green-600" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleReject(post.id)}
-                          title="Reject"
-                        >
-                          <XCircle className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </>
-                    )}
-                    <Button variant="ghost" size="icon" title="View">
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" title="Edit">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleDelete(post.id)}
-                      title="Delete"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
+            {posts.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center text-muted-foreground">
+                  No posts yet. Create your first post!
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              posts.map((post) => (
+                <TableRow key={post.id}>
+                  <TableCell className="font-medium">{post.title}</TableCell>
+                  <TableCell>{post.category}</TableCell>
+                  <TableCell>{getStatusBadge(post.status)}</TableCell>
+                  <TableCell>{post.author}</TableCell>
+                  <TableCell>{new Date(post.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      {post.status === "pending" && (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleApprove(post.id)}
+                            title="Approve"
+                          >
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleReject(post.id)}
+                            title="Reject"
+                          >
+                            <XCircle className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </>
+                      )}
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            title="View"
+                            onClick={() => setSelectedPost(post)}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>{selectedPost?.title}</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="secondary">{selectedPost?.category}</Badge>
+                              <span className="text-sm text-muted-foreground">
+                                {selectedPost?.readTime}
+                              </span>
+                            </div>
+                            {selectedPost?.excerpt && (
+                              <p className="text-muted-foreground italic">{selectedPost.excerpt}</p>
+                            )}
+                            <div className="prose prose-sm dark:prose-invert max-w-none">
+                              {selectedPost?.content.split('\n').map((paragraph, idx) => (
+                                <p key={idx}>{paragraph}</p>
+                              ))}
+                            </div>
+                            <div className="flex items-center justify-between text-sm text-muted-foreground pt-4 border-t">
+                              <span>By {selectedPost?.author}</span>
+                              <span>{selectedPost && new Date(selectedPost.createdAt).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleDelete(post.id)}
+                        title="Delete"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

@@ -5,14 +5,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useCMS } from "@/contexts/CMSContext";
 
 const CreatePost = () => {
+  const { addPost, categories } = useCMS();
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
     content: "",
     category: "",
-    status: "draft"
+    status: "draft" as "draft" | "published" | "pending",
+    author: "Admin User"
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -23,7 +26,7 @@ const CreatePost = () => {
       return;
     }
 
-    // Here you would typically save to the database
+    addPost(formData);
     toast.success("Post created successfully!");
     
     // Reset form
@@ -32,7 +35,8 @@ const CreatePost = () => {
       excerpt: "",
       content: "",
       category: "",
-      status: "draft"
+      status: "draft",
+      author: "Admin User"
     });
   };
 
@@ -84,10 +88,11 @@ const CreatePost = () => {
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Development">Development</SelectItem>
-              <SelectItem value="Technology">Technology</SelectItem>
-              <SelectItem value="Marketing">Marketing</SelectItem>
-              <SelectItem value="Design">Design</SelectItem>
+              {categories.map((cat) => (
+                <SelectItem key={cat.id} value={cat.name}>
+                  {cat.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -96,7 +101,9 @@ const CreatePost = () => {
           <Label htmlFor="status">Status</Label>
           <Select
             value={formData.status}
-            onValueChange={(value) => setFormData({ ...formData, status: value })}
+            onValueChange={(value: "draft" | "published" | "pending") => 
+              setFormData({ ...formData, status: value })
+            }
           >
             <SelectTrigger id="status">
               <SelectValue />
@@ -108,6 +115,16 @@ const CreatePost = () => {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="author">Author</Label>
+        <Input
+          id="author"
+          placeholder="Author name"
+          value={formData.author}
+          onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+        />
       </div>
 
       <div className="flex gap-3">
@@ -122,7 +139,8 @@ const CreatePost = () => {
             excerpt: "",
             content: "",
             category: "",
-            status: "draft"
+            status: "draft",
+            author: "Admin User"
           })}
         >
           Clear
