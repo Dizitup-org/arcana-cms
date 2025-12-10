@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -32,18 +33,18 @@ const Blog = () => {
       <header className="relative z-10 border-b border-border/50 bg-card/50 backdrop-blur-md sticky top-0">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <a href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/25">
                 <FileText className="h-5 w-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-bold text-foreground">ModernCMS</span>
-            </a>
+            </Link>
             <div className="flex items-center gap-3">
               <Button variant="ghost" asChild>
-                <a href="/">Home</a>
+                <Link to="/">Home</Link>
               </Button>
               <Button asChild className="bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg shadow-primary/25">
-                <a href="/admin">Admin</a>
+                <Link to="/admin">Admin</Link>
               </Button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -23,11 +24,11 @@ const Admin = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <a href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/25">
                   <LayoutDashboard className="h-5 w-5 text-primary-foreground" />
                 </div>
-              </a>
+              </Link>
               <div>
                 <h1 className="text-xl font-bold text-foreground">CMS Admin</h1>
                 <p className="text-sm text-muted-foreground">Content Management Dashboard</p>
@@ -35,7 +36,7 @@ const Admin = () => {
             </div>
             <div className="flex items-center gap-3">
               <Button variant="outline" asChild className="border-border/50 hover:border-primary/50 text-foreground">
-                <a href="/blog">View Blog</a>
+                <Link to="/blog">View Blog</Link>
               </Button>
               <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                 <LogOut className="h-5 w-5" />
