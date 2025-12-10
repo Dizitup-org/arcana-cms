@@ -11,7 +11,7 @@ const Admin = () => {
   const [activeTab, setActiveTab] = useState("posts");
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Decorative background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
