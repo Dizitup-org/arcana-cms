@@ -43,6 +43,7 @@ All colors MUST be HSL.
     --gradient-hero: linear-gradient(135deg, hsl(217 91% 60% / 0.1), hsl(199 89% 48% / 0.1));
     --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(210 40% 98%));
     --gradient-subtle: linear-gradient(180deg, hsl(210 40% 98%), hsl(214 32% 96%));
+    --gradient-background: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(204 100% 97%) 25%, hsl(199 89% 94%) 50%, hsl(204 100% 97%) 75%, hsl(0 0% 100%) 100%);
     
     /* Enhanced shadows with blue tint */
     --shadow-card: 0 1px 3px 0 hsl(217 91% 60% / 0.05), 0 1px 2px -1px hsl(217 91% 60% / 0.05);
@@ -92,6 +93,7 @@ All colors MUST be HSL.
     --gradient-hero: linear-gradient(135deg, hsl(217 91% 60% / 0.15), hsl(199 89% 48% / 0.1));
     --gradient-card: linear-gradient(145deg, hsl(217 33% 14%), hsl(217 33% 12%));
     --gradient-subtle: linear-gradient(180deg, hsl(217 33% 10%), hsl(217 33% 14%));
+    --gradient-background: linear-gradient(135deg, hsl(217 33% 10%) 0%, hsl(217 50% 15%) 25%, hsl(199 50% 18%) 50%, hsl(217 50% 15%) 75%, hsl(217 33% 10%) 100%);
     --shadow-card: 0 1px 3px 0 hsl(217 91% 60% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.3);
     --shadow-card-hover: 0 20px 40px -12px hsl(217 91% 60% / 0.25);
     --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.3);
@@ -113,6 +115,9 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: var(--gradient-background);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 }
