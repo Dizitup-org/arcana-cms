@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, Shield, Layers, Zap, ArrowRight, Sparkles } from "lucide-react";
+import { FileText, Shield, Layers, ArrowRight, Sparkles } from "lucide-react";
 
 const Index = () => {
   return (
@@ -24,10 +25,10 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-3">
               <Button variant="ghost" asChild>
-                <a href="/blog">Blog</a>
+                <Link to="/blog">Blog</Link>
               </Button>
               <Button asChild className="bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-lg shadow-primary/25">
-                <a href="/admin">Admin Panel</a>
+                <Link to="/admin">Admin Panel</Link>
               </Button>
             </div>
           </div>
@@ -55,13 +56,13 @@ const Index = () => {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
             <Button size="lg" className="text-lg px-8 bg-gradient-to-r from-primary to-accent hover:opacity-90 shadow-xl shadow-primary/25 group" asChild>
-              <a href="/admin" className="flex items-center gap-2">
+              <Link to="/admin" className="flex items-center gap-2">
                 Get Started
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </Link>
             </Button>
             <Button size="lg" variant="outline" className="text-lg px-8 border-border hover:bg-secondary/50 hover:border-primary/50" asChild>
-              <a href="/blog">View Blog</a>
+              <Link to="/blog">View Blog</Link>
             </Button>
           </div>
         </div>
@@ -130,7 +131,7 @@ const Index = () => {
               Start managing your content today with our powerful and intuitive CMS platform
             </p>
             <Button size="lg" className="text-lg px-8 bg-card text-foreground hover:bg-card/90 shadow-xl" asChild>
-              <a href="/admin">Access Admin Panel</a>
+              <Link to="/admin">Access Admin Panel</Link>
             </Button>
           </CardContent>
         </Card>
