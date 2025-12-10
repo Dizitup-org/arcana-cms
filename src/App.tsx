@@ -14,12 +14,13 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [showWelcome, setShowWelcome] = useState(true);
-  const [contentVisible, setContentVisible] = useState(false);
+  const hasSeenWelcome = sessionStorage.getItem("hasSeenWelcome");
+  const [showWelcome, setShowWelcome] = useState(!hasSeenWelcome);
+  const [contentVisible, setContentVisible] = useState(!!hasSeenWelcome);
 
   const handleAnimationComplete = () => {
+    sessionStorage.setItem("hasSeenWelcome", "true");
     setShowWelcome(false);
-    // Trigger content fade-in
     setTimeout(() => setContentVisible(true), 50);
   };
 
