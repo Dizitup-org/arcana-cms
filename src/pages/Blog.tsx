@@ -123,41 +123,42 @@ const Blog = () => {
         ) : (
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredPosts.map(post => (
-              <Card 
-                key={post.id} 
-                className="group bg-card/80 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 cursor-pointer overflow-hidden"
-              >
-                <div className="h-2 bg-gradient-to-r from-primary to-accent" />
-                <CardHeader className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Badge className="bg-gradient-to-r from-primary/10 to-accent/10 text-primary border-0 font-medium">
-                      {post.category}
-                    </Badge>
-                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                      <Clock className="h-3.5 w-3.5" />
-                      {post.readTime}
+              <Link key={post.id} to={`/blog/${post.id}`}>
+                <Card 
+                  className="group h-full bg-card/80 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all duration-500 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 cursor-pointer overflow-hidden"
+                >
+                  <div className="h-2 bg-gradient-to-r from-primary to-accent" />
+                  <CardHeader className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Badge className="bg-gradient-to-r from-primary/10 to-accent/10 text-primary border-0 font-medium">
+                        {post.category}
+                      </Badge>
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Clock className="h-3.5 w-3.5" />
+                        {post.readTime}
+                      </div>
                     </div>
-                  </div>
-                  <CardTitle className="text-lg text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                    {post.title}
-                  </CardTitle>
-                  <CardDescription className="text-muted-foreground line-clamp-2 leading-relaxed">
-                    {post.excerpt}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-muted-foreground pt-2 border-t border-border/50">
-                    <div className="flex items-center gap-1.5">
-                      <User className="h-3.5 w-3.5" />
-                      <span>{post.author}</span>
+                    <CardTitle className="text-lg text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                      {post.title}
+                    </CardTitle>
+                    <CardDescription className="text-muted-foreground line-clamp-2 leading-relaxed">
+                      {post.excerpt}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between text-sm text-muted-foreground pt-2 border-t border-border/50">
+                      <div className="flex items-center gap-1.5">
+                        <User className="h-3.5 w-3.5" />
+                        <span>{post.author}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5" />
-                      <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         )}
